@@ -27,10 +27,16 @@ def predict_frame(frame):
 # Function to generate video frames with predictions
 def generate_frames():
     video_capture = cv2.VideoCapture(0)
+    if not video_capture.isOpened():
+        print("Error: Unable to open camera.")
+        return
+    
     while True:
         ret, frame = video_capture.read()
-        # if not ret:
-        #     break
+        if not ret:
+            print("Error: Unable to capture frame.")
+            continue
+        
         processed_frame = preprocess_frame(frame)
         predicted_classes = predict_frame(processed_frame)
         if predicted_classes[0] == 0:
@@ -45,6 +51,7 @@ def generate_frames():
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
 
 @app.route('/')
 def index():
