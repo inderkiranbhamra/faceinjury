@@ -3,31 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Injury Detection</title>
+    <title>Video Stream</title>
 </head>
 <body>
-    <h1>Injury Detection</h1>
+    <h1>Live Video Stream with Predictions</h1>
+    <button onclick="requestCameraPermission()">Grant Access to Camera</button>
     <div id="video-container"></div>
 
     <script>
         function requestCameraPermission() {
             navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
-                var video = document.createElement("{{ url_for('video_feed') }}");
+                var video = document.createElement('video');
                 video.srcObject = stream;
+                video.setAttribute('width', '640');
+                video.setAttribute('height', '480');
                 video.setAttribute('autoplay', '');
-                video.setAttribute('playsinline', '');
                 document.getElementById('video-container').appendChild(video);
             })
             .catch(function(err) {
                 alert("Unable to access the camera!");
             });
         }
-
-        // Request camera permission when the page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            requestCameraPermission();
-        });
     </script>
 </body>
 </html>
