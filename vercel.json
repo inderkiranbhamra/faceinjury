@@ -2,13 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "app.py",
+      "src":"./index.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "2048mb", "pythonVersion": "3" }
+      "config": {"runtime": "python3"}
     }
   ],
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/app.py" }
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
   ]
 }
