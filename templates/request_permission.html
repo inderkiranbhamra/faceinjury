@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Camera Permission</title>
+</head>
+<body>
+    <h1>Camera Permission Required</h1>
+    <p>Please grant permission to access the camera.</p>
+    <button onclick="requestCameraPermission()">Grant Permission</button>
+
+    <script>
+        function requestCameraPermission() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                window.location.href = "/";
+            })
+            .catch(function(err) {
+                alert("Unable to access the camera!");
+            });
+        }
+    </script>
+</body>
+</html>
