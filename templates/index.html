@@ -1,25 +1,33 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Live Video Stream</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--    <h1>Live Video Stream</h1>-->
-<!--    <img id="video_feed" src="{{ url_for('video_feed') }}" alt="Live Video Stream" width="640" height="480">-->
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Stream</title>
+    <title>Injury Detection</title>
 </head>
 <body>
-    <h1>Live Video Stream with Predictions</h1>
-    <img src="{{ url_for('video_feed') }}" width="640" height="480">
+    <h1>Injury Detection</h1>
+    <div id="video-container"></div>
+
+    <script>
+        function requestCameraPermission() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var video = document.createElement('video');
+                video.srcObject = stream;
+                video.setAttribute('autoplay', '');
+                video.setAttribute('playsinline', '');
+                document.getElementById('video-container').appendChild(video);
+            })
+            .catch(function(err) {
+                alert("Unable to access the camera!");
+            });
+        }
+
+        // Request camera permission when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            requestCameraPermission();
+        });
+    </script>
 </body>
 </html>
