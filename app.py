@@ -29,8 +29,8 @@ def generate_frames():
     video_capture = cv2.VideoCapture(0)
     while True:
         ret, frame = video_capture.read()
-        if not ret:
-            break
+        # if not ret:
+        #     break
         processed_frame = preprocess_frame(frame)
         predicted_classes = predict_frame(processed_frame)
         if predicted_classes[0] == 0:
