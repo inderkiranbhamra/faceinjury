@@ -33,8 +33,14 @@ def generate_frames():
             break
         processed_frame = preprocess_frame(frame)
         predicted_classes = predict_frame(processed_frame)
-        cv2.putText(frame, "Predicted Class: {}".format(predicted_classes[0]), (10, 30),
+        if predicted_classes[0] == 0:
+            text = "Minor Face Injury"
+        else:
+            text = "Major Face Injury"
+
+        cv2.putText(frame, text, (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
         yield (b'--frame\r\n'
