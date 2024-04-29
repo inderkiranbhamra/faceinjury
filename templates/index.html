@@ -9,6 +9,7 @@
     <h1>Live Video Stream with Predictions</h1>
     <button onclick="requestCameraPermission()">Grant Access to Camera</button>
     <div id="video-container"></div>
+    <img src="{{ url_for('video_feed') }}" width="640" height="480">
 
     <script>
         function requestCameraPermission() {
