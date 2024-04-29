@@ -27,16 +27,21 @@ def predict_frame(frame):
 # Function to generate video frames with predictions
 def generate_frames():
     video_capture = cv2.VideoCapture(0)
-    while True:
-        ret, frame = video_capture.read()
-        processed_frame = preprocess_frame(frame)
-        predicted_classes = predict_frame(processed_frame)
-        cv2.putText(frame, "Predicted Class: {}".format(predicted_classes[0]), (10, 30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-        ret, buffer = cv2.imencode('.jpg', frame)
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+    if not video_capture.isOpened():
+        yield b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + b'Camera not accessible\r\n'
+    else:
+        while True:
+            ret, frame = video_capture.read()
+            if not ret:
+                break
+            processed_frame = preprocess_frame(frame)
+            predicted_classes = predict_frame(processed_frame)
+            cv2.putText(frame, "Predicted Class: {}".format(predicted_classes[0]), (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/')
 def index():
@@ -45,6 +50,10 @@ def index():
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/request_permission')
+def request_permission():
+    return render_template('request_permission.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
